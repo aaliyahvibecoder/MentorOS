@@ -1,0 +1,8 @@
+streamlit
+pandas
+altair
+python-docx
+pypdf
+docxtpl
+reportlab
+google-generativeai
