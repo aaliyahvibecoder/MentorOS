@@ -26,14 +26,12 @@ with tab1:
         st.markdown("### 1. IDENTITY & SCHEDULING")
         c1, c2, c3 = st.columns(3)
         
+        # 1. NAME (Column 1)
         with c1:
             client_name = st.text_input("STUDENT NAME (Required)*")
         
-        with c2:
-            # NEW: Date Picker and Reminder
-            session_date = st.date_input("NEXT SESSION DATE", datetime.date.today())
-            session_time = st.time_input("SESSION TIME", datetime.time(9, 00))
-            
+        # 2. SESSION TYPE (Column 3) 
+        # Executed BEFORE Column 2 so we can check the type for Async logic
         with c3:
             session_type = st.selectbox("INITIAL SESSION TYPE", [
                 "Mock Interview", 
@@ -43,8 +41,19 @@ with tab1:
                 "LinkedIn Audit", 
                 "Networking Strategy"
             ])
-            # NEW: Reminder Freq
+            # Reminder Freq
             reminder = st.selectbox("REMINDER FREQUENCY", ["None", "24h Before", "1h Before"])
+
+        # 3. DATE & TIME (Column 2)
+        with c2:
+            session_date = st.date_input("NEXT SESSION DATE", datetime.date.today())
+            
+            # LOGIC: If Resume Review, hide time input (Async)
+            if session_type == "Resume Review (Full)":
+                st.info("🕒 Time: **Async** (No fixed slot)")
+                session_time = None
+            else:
+                session_time = st.time_input("SESSION TIME", datetime.time(9, 00))
 
     # --- SECTION 2: RESUME DATA SYNC ---
     with st.container(border=True):
@@ -121,6 +130,7 @@ with tab1:
                 time_str = session_time.strftime("%H:%M")
             else:
                 time_str = "Async"
+            
             date_str = session_date.strftime("%Y-%m-%d")
                 
             str_val = strengths if strengths else "Pending Assessment"
