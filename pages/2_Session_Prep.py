@@ -180,7 +180,7 @@ if session_type == "Mock Interview":
             if selected_client == "Guest / Walk-in":
                 st.error("Cannot save guest.")
             else:
-                # FIX: No truncation. Save the FULL generated agenda.
+                # FIX: Explicitly grab full text from session state to avoid truncation
                 agenda = st.session_state.get(f"last_agenda_{selected_client}", "No AI Agenda generated.")
                 timestamp = datetime.date.today().strftime("%m/%d")
                 
